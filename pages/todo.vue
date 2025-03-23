@@ -47,52 +47,55 @@
   const errorMessage = ref("");
   
   // Ambil Data dari Backend
-  const fetchTodos = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/todo");
-      const data = await response.json();
-      todos.value = data.result;
-    } catch (error) {
-      console.error("Error fetching todos:", error);
-    }
-  };
-  
-  // Kirim Data ke Backend
-  const handleSubmit = async () => {
-    try {
-      const response = await fetch("http://localhost:8080/todo", {
-        method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nama: nama.value, kegiatan: kegiatan.value }),
-      });
-  
-      if (!response.ok) throw new Error("Gagal menambahkan kegiatan.");
-  
-      // Reset input dan refresh data
-      nama.value = "";
-      kegiatan.value = "";
-      fetchTodos();
-    } catch (error) {
-      errorMessage.value = error.message;
-    }
-  };
-  
-  // Hapus Data dari Backend
-  const deleteTodo = async (id) => {
-    try {
-      const response = await fetch(`http://localhost:8080/todo/${id}`, {
-        method: "DELETE",
-      });
-  
-      if (!response.ok) throw new Error("Gagal menghapus kegiatan.");
-  
-      // Refresh daftar setelah menghapus
-      fetchTodos();
-    } catch (error) {
-      console.error("Error deleting todo:", error);
-    }
-  };
-  
+  const API_URL = "https://paaswebbackend-production.up.railway.app/todo";
+
+// Ambil Data dari Backend
+const fetchTodos = async () => {
+  try {
+    const response = await fetch(API_URL);
+    const data = await response.json();
+    todos.value = data.result;
+  } catch (error) {
+    console.error("Error fetching todos:", error);
+  }
+};
+
+// Kirim Data ke Backend
+const handleSubmit = async () => {
+  try {
+    const response = await fetch(API_URL, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ nama: nama.value, kegiatan: kegiatan.value }),
+    });
+
+    if (!response.ok) throw new Error("Gagal menambahkan kegiatan.");
+
+    // Reset input dan refresh data
+    nama.value = "";
+    kegiatan.value = "";
+    fetchTodos();
+  } catch (error) {
+    errorMessage.value = error.message;
+  }
+};
+
+// Hapus Data dari Backend
+const deleteTodo = async (id) => {
+  try {
+    const response = await fetch(`${API_URL}/${id}`, {
+      method: "DELETE",
+    });
+
+    if (!response.ok) throw new Error("Gagal menghapus kegiatan.");
+
+    // Refresh daftar setelah menghapus
+    fetchTodos();
+  } catch (error) {
+    console.error("Error deleting todo:", error);
+  }
+};
+
   // Ambil data saat pertama kali halaman dimuat
   onMounted(fetchTodos);
   </script>
