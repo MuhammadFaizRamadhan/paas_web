@@ -47,7 +47,7 @@
   const errorMessage = ref("");
   
   // Ambil Data dari Backend
-  const API_URL = "https://paaswebbackend-production.up.railway.app/todo/";
+  const API_URL = "https://paaswebbackend-production.up.railway.app/todo";
 
 // Ambil Data dari Backend
 const fetchTodos = async () => {
