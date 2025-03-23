@@ -5,14 +5,6 @@
         <!-- Judul -->
         <h1 class="text-xl font-bold text-white">Data User</h1>
   
-        <!-- Informasi User yang Login -->
-        <h2 v-if="currentUser" class="text-lg font-semibold text-white mt-6">
-          Selamat datang, {{ currentUser.nama }}
-        </h2>
-        <p v-if="currentUser" class="text-gray-400">{{ currentUser.email }}</p>
-  
-        <button @click="logout" class="bg-red-500 text-white px-4 py-2 rounded mt-4">Logout</button>
-  
         <!-- Daftar Semua User -->
         <h2 class="text-lg font-semibold text-white mt-6">Daftar Semua User</h2>
   
