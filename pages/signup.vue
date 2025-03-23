@@ -7,7 +7,7 @@
         <NuxtLink to="/signin" class="text-purple-400 hover:underline">Log in</NuxtLink>
       </p>
 
-      <form @submit.prevent="register" class="mt-6 space-y-4">
+      <form @submit.prevent="handleSignup" class="mt-6 space-y-4">
         <input v-model="nama" type="text" placeholder="Name" class="w-full bg-gray-700 p-3 rounded border border-gray-600 focus:outline-none focus:border-purple-400" required />
         <input v-model="email" type="email" placeholder="Email" class="w-full bg-gray-700 p-3 rounded border border-gray-600 focus:outline-none focus:border-purple-400" required />
         
@@ -25,40 +25,36 @@
   </div>
 </template>
 
+
 <script setup>
 import { ref } from "vue";
+import { useRouter } from "vue-router";
 
 const nama = ref("");
 const email = ref("");
 const password = ref("");
 const errorMessage = ref("");
+const router = useRouter();
 
-const register = async () => {
+const handleSignup = async () => {
   try {
     const response = await fetch("http://localhost:8080/user/", {
       method: "POST",
-      headers: {
-        "Content-Type": "application/json",
-      },
+      headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ nama: nama.value, email: email.value, password: password.value }),
     });
 
-    const result = await response.json();
-    if (!response.ok) {
-      throw new Error(result.message || "Gagal mendaftar");
+    const data = await response.json();
+
+    if (response.ok) {
+      localStorage.setItem("token", data.token);
+      localStorage.setItem("user", JSON.stringify(data.user));
+      router.push("/profile");
+    } else {
+      errorMessage.value = data.message || "Signup failed";
     }
-
-    // Simpan data user di localStorage
-    localStorage.setItem("user", JSON.stringify({
-      nama: nama.value,
-      email: email.value,
-    }));
-
-    // Redirect ke halaman profile
-    navigateTo("/profile");
-  } catch (err) {
-    console.error(err);
+  } catch (error) {
+    errorMessage.value = "Something went wrong. Please try again.";
   }
 };
-
 </script>
