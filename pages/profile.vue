@@ -3,13 +3,20 @@
       <div class="bg-stone-800 text-white p-6 rounded-lg shadow-lg w-full max-w-md text-center">
         
         <!-- Judul -->
-        <h1 class="text-xl font-bold text-white-900">Data User</h1>
+        <h1 class="text-xl font-bold text-white">Data User</h1>
   
+        <!-- Informasi User yang Login -->
+        <h2 v-if="currentUser" class="text-lg font-semibold text-white mt-6">
+          Selamat datang, {{ currentUser.nama }}
+        </h2>
+        <p v-if="currentUser" class="text-gray-400">{{ currentUser.email }}</p>
   
-        <h2 class="text-lg font-semibold text-white-900 mt-6">Daftar Semua User</h2>
+        <button @click="logout" class="bg-red-500 text-white px-4 py-2 rounded mt-4">Logout</button>
   
         <!-- Daftar Semua User -->
-        <ul v-if="users.length > 0" class="mt-4 text-white-900">
+        <h2 class="text-lg font-semibold text-white mt-6">Daftar Semua User</h2>
+  
+        <ul v-if="users.length > 0" class="mt-4 text-white">
           <li v-for="user in users" :key="user.id_user" class="bg-gray-700 p-2 rounded mb-2">
             {{ user.nama }} - {{ user.email }}
           </li>
@@ -23,13 +30,12 @@
   <script setup>
   import { ref, onMounted } from "vue";
   import { useRouter } from "vue-router";
-  import Navbar from "@/components/Navbar.vue";
   
   const currentUser = ref(null);
   const users = ref([]);
   const router = useRouter();
   
-  // Ambil data user yang sedang login dari localStorage
+  // Mengambil data user yang sedang login dari localStorage
   const fetchCurrentUser = () => {
     const userData = localStorage.getItem("user");
   
@@ -40,31 +46,29 @@
     }
   };
   
-  // Ambil semua user dari backend
+  // Mengambil semua user dari backend (tanpa otorisasi token)
   const fetchAllUsers = async () => {
     try {
-      const token = localStorage.getItem("token");
-  
-      if (!token) {
-        router.push("/signup");
-        return;
-      }
-  
       const response = await fetch("http://localhost:8080/user", {
         method: "GET",
-        headers: { Authorization: `Bearer ${token}` },
       });
   
       const data = await response.json();
-      
+  
       if (response.ok) {
-        users.value = data.result;
+        users.value = data.users; // Menggunakan `data.users` sesuai dengan respons backend
       } else {
         console.error("Gagal mengambil data user:", data.message);
       }
     } catch (error) {
       console.error("Error mengambil data user:", error);
     }
+  };
+  
+  // Fungsi logout
+  const logout = () => {
+    localStorage.removeItem("user");
+    router.push("/signup");
   };
   
   onMounted(() => {

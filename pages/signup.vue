@@ -25,7 +25,6 @@
   </div>
 </template>
 
-
 <script setup>
 import { ref } from "vue";
 import { useRouter } from "vue-router";
@@ -47,8 +46,7 @@ const handleSignup = async () => {
     const data = await response.json();
 
     if (response.ok) {
-      localStorage.setItem("token", data.token);
-      localStorage.setItem("user", JSON.stringify(data.user));
+      localStorage.setItem("user", JSON.stringify(data.user)); // Simpan user tanpa token
       router.push("/profile");
     } else {
       errorMessage.value = data.message || "Signup failed";
