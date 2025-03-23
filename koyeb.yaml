@@ -1,8 +1,0 @@
-name: paas_web
-type: web
-env: node
-port: 3000
-build:
-  command: npm install && npm run build
-run:
-  command: npm run start
