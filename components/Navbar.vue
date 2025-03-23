@@ -15,6 +15,7 @@
     <!-- Menu Utama -->
     <div class="space-x-6 hidden md:flex">
       <NuxtLink to="/" class="hover:text-gray-300 transition">Home</NuxtLink>
+      <NuxtLink to="/todo" class="hover:text-gray-300 transition">Todo</NuxtLink>
       <!-- <NuxtLink to="/about" class="hover:text-gray-300 transition">About</NuxtLink>
       <NuxtLink to="/contact" class="hover:text-gray-300 transition">Contact</NuxtLink> -->
     </div>
